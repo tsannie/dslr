@@ -77,7 +77,10 @@ def ft_describe(dataframe):
 
         t = analys(clean_data)
         for i in t:
-            describe += "{:>15.4f} |".format(i)
+            if len(str(int(i))) > 10:
+                describe += "{:>15.5e} |".format(i)
+            else:
+                describe += "{:>15.5f} |".format(i)
         describe += "\n"
 
     return describe
