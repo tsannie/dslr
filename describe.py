@@ -1,5 +1,6 @@
 import pandas as pd
 import sys
+from utils import is_float_column
 
 
 def ft_count(dataframe):
@@ -37,7 +38,7 @@ def ft_percentile(dataframe, percentile):
 def feature_list(dataframe):
     features_name = []
     for feature in dataframe.columns:
-        if isinstance(dataframe[feature][0], float):
+        if is_float_column(dataframe, feature):
             features_name.append(feature)
     return features_name
 
