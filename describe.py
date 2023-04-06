@@ -1,6 +1,6 @@
 import pandas as pd
 import sys
-from utils import is_float_column
+from utils import index_not_float
 
 
 def ft_count(dataframe):
@@ -35,14 +35,6 @@ def ft_percentile(dataframe, percentile):
         return (1 - p) * dataframe[j] + p * dataframe[j+1]
 
 
-def feature_list(dataframe):
-    features_name = []
-    for feature in dataframe.columns:
-        if is_float_column(dataframe, feature):
-            features_name.append(feature)
-    return features_name
-
-
 def analys(dataframe):
     return [
         ft_count(dataframe),
@@ -59,7 +51,9 @@ def analys(dataframe):
 def ft_describe(dataframe):
     stats = ["", "count", "mean", "std", "min", "25%", "50%", "75%", "max"]
     describe = ""
-    features = feature_list(dataframe)
+    to_remove = index_not_float(dataframe)
+    dataframe = dataframe.drop(dataframe.columns[to_remove], axis=1)
+    features = dataframe.columns
 
     for stat in stats:
         if len(stat) > 12:

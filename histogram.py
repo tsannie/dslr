@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 import argparse
-from utils import is_float_column
+from utils import index_not_float, is_float_column
 
 default_file_path = "./data/dataset_train.csv"
 
@@ -16,11 +16,8 @@ def histogram(df, courses):
         courses.insert(0, "Hogwarts House")
         df = df[courses]
     else:
-        features_to_remove = []
-        for i in range(1, len(df.columns) - 1):
-            if not is_float_column(df, df.columns[i]):
-                features_to_remove.append(i)
-        df = df.drop(df.columns[features_to_remove], axis=1)
+        to_remove = index_not_float(df, add_house=False)
+        df = df.drop(df.columns[to_remove], axis=1)
     courses = df.columns[1:]
     houses = set(df["Hogwarts House"])
 
@@ -44,8 +41,8 @@ def histogram(df, courses):
                     bins=10,
                     alpha=0.5,
                     label=house)
-        ax.legend()
 
+    plt.legend(houses, loc='upper center', bbox_to_anchor=(1.5, 0.8))
     plt.subplots_adjust(wspace=0.5, hspace=0.5)
     plt.show()
 
