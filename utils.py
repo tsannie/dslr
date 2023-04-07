@@ -9,7 +9,6 @@ def is_float_column(df, feature):
 def index_not_float(df, delete_house=True):
     features = []
     for i in range(0, len(df.columns)):
-        print(df.columns[i])
         if df.columns[i] == "Hogwarts House" and not delete_house:
             continue
         if not is_float_column(df, df.columns[i]):
@@ -33,12 +32,8 @@ def impute(X):
     return X
 
 
-def accuracy_score(y_true, y_pred):
-    """Compute accuracy score"""
+def predict(X, theta):
+    """Return the prediction of X using a logistic regression"""
 
-    return np.sum(y_true == y_pred) / len(y_true)
+    return 1 / (1 + np.exp(-np.dot(X, theta)))
 
-def save(self, path):
-    """Save weights to file"""
-
-    np.savetxt(path, self.weights, delimiter=",")

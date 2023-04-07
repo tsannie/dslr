@@ -8,9 +8,9 @@ import os
 
 default_file_path = "./data/dataset_train.csv"
 default_test_path = "./data/dataset_test.csv"
-default_weights_path = "./data/weights.csv"
+default_weights_path = "./data/thetas.csv"
 
-def test_logreg(lr):
+""" def test_logreg(lr):
     df = pd.read_csv(default_test_path, index_col=0)
     to_remove = index_not_float(df)
     print(to_remove)
@@ -30,7 +30,7 @@ def test_logreg(lr):
     print("Predictions: ", *pred, sep=" ")
     print("Truth: ", *truth, sep=" ")
 
-    print("Accuracy: ", accuracy_score(truth, pred))
+    print("Accuracy: ", accuracy_score(truth, pred)) """
 
 
 def logreg(dataframe):
@@ -47,6 +47,10 @@ def logreg(dataframe):
     features = impute(features)
     features = standardize(features)
 
+    with open(default_weights_path, "w") as f:
+        f.write("Hogwarts House,Theta\n")
+        f.close()
+
     for house in houses:
         print("Training for {}: ".format(house))
 
@@ -54,7 +58,7 @@ def logreg(dataframe):
 
         lr = LogisticRegression()
         lr.fit(features, target_house)
-        lr.save(default_weights_path)
+        lr.save(default_weights_path, house)
 
     # test_logreg(lr)
 
@@ -71,9 +75,6 @@ if __name__ == '__main__':
 
     try:
         df = pd.read_csv(args.file, index_col=0)
-
-        if os.path.exists(default_weights_path):
-            os.remove(default_weights_path)
 
         logreg(df)
     except FileNotFoundError:

@@ -68,3 +68,9 @@ class LogisticRegression:
         m = y.shape[0]
         return - 1 / m * np.sum(y * np.log(y_predicted)
                                 + (1 - y) * np.log(1 - y_predicted))
+
+    def save(self, path, house):
+        with open(path, mode='a') as f:
+            f.write(house + ",")
+            np.savetxt(f, self.w.T, delimiter=" ")
+            f.close()
