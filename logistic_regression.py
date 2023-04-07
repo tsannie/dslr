@@ -1,42 +1,70 @@
 import numpy as np
-
-def log_loss(y_true, y_predicted):
-    epsilon = 1e-15
-    y_predicted_new = [max(i, epsilon) for i in y_predicted]
-    y_predicted_new = [min(i, 1 - epsilon) for i in y_predicted_new]
-    y_predicted_new = np.array(y_predicted_new)
-    return - np.mean(y_true * np.log(y_predicted_new) + (1 - y_true) * np.log(1 - y_predicted_new))
-
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from sklearn.metrics import accuracy_score
 
 class LogisticRegression:
-    def __init__(self, learning_rate=0.01, n_iters=1000):
-        self.lr = learning_rate
-        self.n_iters = n_iters
-        self.weights = None
-        self.bias = None
+    def __init__(self, learning_rate=0.01, batch_size=20, epochs=60):
+        self.learning_rate = learning_rate
+        self.batch_size = batch_size
+        self.epochs = epochs
+        self.w = None
+        self.b = None
+        self.history_accuracy = []
+        self.history_loss = []
+
+    def grandient_descent(self, X, y):
+        m = X.shape[0]
+        y_predicted = self.sigmoid(np.dot(X, self.w) + self.b)
+        dz = y_predicted - y
+        dw = 1 / m * np.dot(X.T, dz)
+        db = 1 / m * np.sum(dz, axis=0).reshape(-1, 1)
+        return dw, db
 
     def fit(self, X, y):
-        # init parameters
         n_samples, n_features = X.shape
-        self.weights = np.zeros(n_features)
-        self.bias = 0
 
-        # gradient descent
-        for _ in range(self.n_iters):
-            linear_model = np.dot(X, self.weights) + self.bias
-            y_predicted = self._sigmoid(linear_model)
+        self.w = np.random.randn(n_features).reshape(-1, 1)
+        self.b = np.random.randn(1).reshape(-1, 1)
 
-            dw = (1 / n_samples) * np.dot(X.T, (y_predicted - y))
-            db = (1 / n_samples) * np.sum(y_predicted - y)
+        for _ in tqdm(range(self.epochs)):
+            for idx in range(0, n_samples, self.batch_size):
+                X_batch = X[idx:idx+self.batch_size]
+                y_batch = y[idx:idx+self.batch_size]
 
-            self.weights -= self.lr * dw
-            self.bias -= self.lr * db
+                dw, db = self.grandient_descent(X_batch, y_batch)
+
+                self.w -= self.learning_rate * dw
+                self.b -= self.learning_rate * db
+
+                """ y_predicted = self.sigmoid(np.dot(X, self.w) + self.b)
+                y_predicted_class = [1 if i > 0.5 else 0 for i in y_predicted]
+                self.history_accuracy.append(accuracy_score(y, y_predicted_class))
+                self.history_loss.append(self.log_loss(y, y_predicted))
+
+        plt.plot(self.history_accuracy)
+        plt.title("Accuracy")
+
+        plt.figure()
+        plt.plot(self.history_loss)
+        plt.title("Loss")
+
+        plt.show() """
+
+        y_predicted = self.sigmoid(np.dot(X, self.w) + self.b)
+        y_predicted_class = [1 if i > 0.5 else 0 for i in y_predicted]
+        print("Loss: ", self.log_loss(y, y_predicted))
+        print("Accuracy: ", accuracy_score(y, y_predicted_class))
+
+    def sigmoid(self, x):
+        return 1.0 / (1.0 + np.exp(-x))
 
     def predict(self, X):
-        linear_model = np.dot(X, self.weights) + self.bias
-        y_predicted = self._sigmoid(linear_model)
-        y_predicted_cls = [1 if i > 0.5 else 0 for i in y_predicted]
-        return y_predicted_cls
+        y_predicted = self.sigmoid(np.dot(X, self.w) + self.b)
+        y_predicted_class = [1 if i > 0.5 else 0 for i in y_predicted]
+        return y_predicted_class
 
-    def _sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
+    def log_loss(self, y, y_predicted):
+        m = y.shape[0]
+        return - 1 / m * np.sum(y * np.log(y_predicted)
+                                + (1 - y) * np.log(1 - y_predicted))

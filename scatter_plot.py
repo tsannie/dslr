@@ -15,7 +15,7 @@ def scatter(df, c1, c2):
         courses.insert(0, "Hogwarts House")
         df = df[courses]
     else:
-        to_remove = index_not_float(df, add_house=False)
+        to_remove = index_not_float(df, delete_house=False)
         df = df.drop(df.columns[to_remove], axis=1)
     courses = df.columns[1:]
     houses = set(df["Hogwarts House"])

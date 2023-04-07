@@ -8,7 +8,7 @@ default_file_path = "./data/dataset_train.csv"
 
 
 def pair_plot(df):
-    to_remove = index_not_float(df, add_house=False)
+    to_remove = index_not_float(df, delete_house=False)
     df = df.drop(df.columns[to_remove], axis=1)
     courses = df.columns[1:]
 
