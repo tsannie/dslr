@@ -4,7 +4,7 @@ from tqdm import tqdm
 from sklearn.metrics import accuracy_score
 
 class LogisticRegression:
-    def __init__(self, learning_rate=0.01, batch_size=20, epochs=60):
+    def __init__(self, learning_rate=1, batch_size=1, epochs=1):
         self.learning_rate = learning_rate
         self.batch_size = batch_size
         self.epochs = epochs
