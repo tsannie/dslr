@@ -23,21 +23,22 @@ def scatter(df, c1, c2):
     n_courses = len(courses)
     fig, axes = plt.subplots(nrows=n_courses, ncols=n_courses, figsize=(16, 12))
     # set subtitle
-    plt.suptitle(
-        "Scatter plot of the {} courses".format(n_courses),
-        fontsize=20
-    )
+    plt.suptitle("Scatter plot of the {} courses".format(n_courses), fontsize=20)
 
     for i, course1 in enumerate(courses):
         for j, course2 in enumerate(courses):
             ax = axes[i, j]
 
             if i == 0:
-                ax.set_title(course2[:20] + "..." if len(course2) > 20
-                             else course2, rotation=20)
+                ax.set_title(
+                    course2[:20] + "..." if len(course2) > 20 else course2, rotation=20
+                )
             if j == 0:
-                ax.set_ylabel(course1[:20] + "..." if len(course1) > 20
-                              else course1, ha='right', rotation=0)
+                ax.set_ylabel(
+                    course1[:20] + "..." if len(course1) > 20 else course1,
+                    ha="right",
+                    rotation=0,
+                )
             ax.set_xticks([])
             ax.set_yticks([])
             for house in houses:
@@ -45,11 +46,11 @@ def scatter(df, c1, c2):
                     df[df["Hogwarts House"] == house][course1],
                     df[df["Hogwarts House"] == house][course2],
                     label=house,
-                    s=2
+                    s=2,
                 )
 
     handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, loc='upper right')
+    fig.legend(handles, labels, loc="upper right")
 
     plt.subplots_adjust(wspace=0.5, hspace=0.5)
     plt.show()
@@ -57,13 +58,11 @@ def scatter(df, c1, c2):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file",
-                        help="Path to the csv file",
-                        default=default_file_path)
-    parser.add_argument("-c1", "--course1",
-                        help="First course to compare")
-    parser.add_argument("-c2", "--course2",
-                        help="Second course to compare")
+    parser.add_argument(
+        "-f", "--file", help="Path to the csv file", default=default_file_path
+    )
+    parser.add_argument("-c1", "--course1", help="First course to compare")
+    parser.add_argument("-c2", "--course2", help="Second course to compare")
 
     args = parser.parse_args()
 

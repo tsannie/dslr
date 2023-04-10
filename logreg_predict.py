@@ -6,17 +6,15 @@ from utils import index_not_float, standardize, impute, predict
 default_predictions_path = "./data/predictions.csv"
 
 
-def logreg_predict(dataframe, thetas):
+def logreg_predict(dataframe, thetas, show_predictions=False):
     houses = thetas.index
 
     thetas["Theta"] = thetas["Theta"].apply(
         lambda x: np.fromstring(x, dtype=float, sep=" ")
     )
 
-    print(thetas["Theta"]["Ravenclaw"])
-
-    to_remove = index_not_float(df)
-    features = df.drop(df.columns[to_remove], axis=1)
+    to_remove = index_not_float(dataframe)
+    features = dataframe.drop(dataframe.columns[to_remove], axis=1)
     features = features.drop("Potions", axis=1)
     features = features.drop("Arithmancy", axis=1)
     features = features.drop("Care of Magical Creatures", axis=1)
@@ -26,18 +24,30 @@ def logreg_predict(dataframe, thetas):
     features = standardize(features)
 
     predictions = []
+    if show_predictions:
+        print("\033[33mIdx \033[0m|", end="")
+        for house in houses:
+            print("\033[34m{}\033[0m|".format(house[0:6]), end="")
+        print()
 
     for i in range(0, len(features)):
-        print("\n\n------------------------------\nStudent: ", i)
-        most_probable = (0, "")
+        all_probabilities = []
         for house in houses:
             theta = thetas["Theta"][house]
             proba = predict(features[i], theta)
-            print("Probability for {}: {:.0f}%".format(house, proba * 100))
-            if proba > most_probable[0]:
-                most_probable = (proba, house)
+            all_probabilities.append((house, proba))
 
-        predictions.append((i, most_probable[1]))
+        most_probable = max(all_probabilities, key=lambda x: x[1])
+        predictions.append((i, most_probable[0]))
+
+        if show_predictions:
+            print("\033[33m{:3} \033[0m|".format(i), end="")
+            for proba in all_probabilities:
+                if proba[0] == most_probable[0]:
+                    print("\033[34m {:3.0f}% \033[0m|".format(proba[1] * 100), end="")
+                else:
+                    print(" {:3.0f}% |".format(proba[1] * 100), end="")
+            print()
 
     return predictions
 
@@ -56,13 +66,21 @@ if __name__ == "__main__":
     parser.add_argument(
         "thetas", help="Thetas to use for prediction", metavar="thetas_path"
     )
+    parser.add_argument(
+        "-s",
+        "--show",
+        help="Show predictions",
+        default=False,
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     try:
         df = pd.read_csv(args.dataset, index_col=0)
         thetas = pd.read_csv(args.thetas, index_col=0)
 
-        predictions = logreg_predict(df, thetas)
+        predictions = logreg_predict(df, thetas, args.show)
         save_predictions(predictions, default_predictions_path)
     except FileNotFoundError:
         exit("Invalid file")

@@ -1,13 +1,18 @@
 import pandas as pd
 import sys
 from utils import index_not_float
+import argparse
+
+default_file_path = "./data/dataset_train.csv"
 
 
 def ft_count(dataframe):
+    """Count is the number of values in a set of data"""
     return dataframe.size
 
 
 def ft_mean(dataframe):
+    """Mean is the average of the numbers"""
     sum_data = 0
     for i in dataframe:
         sum_data += i
@@ -15,6 +20,8 @@ def ft_mean(dataframe):
 
 
 def ft_std(dataframe):
+    """Standard deviation is a measure of the amount
+    of variation or dispersion of a set of values"""
     n = ft_count(dataframe)
     mean = ft_mean(dataframe)
     sum_squared = 0
@@ -24,6 +31,8 @@ def ft_std(dataframe):
 
 
 def ft_percentile(dataframe, percentile):
+    """Percentile is a measure used in statistics indicating the value
+    below which a given percentage of observations in a group of observations falls"""
     n = ft_count(dataframe)
     i = (n - 1) * percentile / 100
     j = int(i)
@@ -32,7 +41,17 @@ def ft_percentile(dataframe, percentile):
     if p == 0:
         return dataframe[j]
     else:
-        return (1 - p) * dataframe[j] + p * dataframe[j+1]
+        return (1 - p) * dataframe[j] + p * dataframe[j + 1]
+
+
+def ft_mad(dataframe):
+    """Median Absolute Deviation is a more robust measure of dispersion"""
+    n = ft_count(dataframe)
+    mean = ft_mean(dataframe)
+    sum_abs = 0
+    for i in dataframe:
+        sum_abs += abs(i - mean)
+    return sum_abs / n
 
 
 def analys(dataframe):
@@ -44,12 +63,26 @@ def analys(dataframe):
         ft_percentile(dataframe, 25),
         ft_percentile(dataframe, 50),
         ft_percentile(dataframe, 75),
-        ft_percentile(dataframe, 100)
+        ft_percentile(dataframe, 100),
+        ft_percentile(dataframe, 75) - ft_percentile(dataframe, 25),
+        ft_mad(dataframe),
     ]
 
 
 def ft_describe(dataframe):
-    stats = ["", "count", "mean", "std", "min", "25%", "50%", "75%", "max"]
+    stats = [
+        "",
+        "count",
+        "mean",
+        "std",
+        "min",
+        "25%",
+        "50%",
+        "75%",
+        "max",
+        "iqr",
+        "mad",
+    ]
     describe = ""
     to_remove = index_not_float(dataframe)
     dataframe = dataframe.drop(dataframe.columns[to_remove], axis=1)
@@ -82,17 +115,12 @@ def ft_describe(dataframe):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python describe.py <csv file>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("csv_file", help="file to describe (csv format)")
+    args = parser.parse_args()
 
     try:
-        df = pd.read_csv(sys.argv[1], index_col="Index")
-
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.max_rows', None)
-        pd.set_option('display.width', None)
-        pd.set_option('display.max_colwidth', None)
+        df = pd.read_csv(args.file, index_col="Index")
 
         print(ft_describe(df))
     except FileNotFoundError:

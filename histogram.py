@@ -26,10 +26,7 @@ def histogram(df, courses):
     n_cols = math.ceil(n_courses / n_rows)
 
     figure = plt.figure(figsize=(16, 12))
-    figure.suptitle(
-        "Histograms of the {} courses".format(n_courses),
-        fontsize=20
-    )
+    figure.suptitle("Histograms of the {} courses".format(n_courses), fontsize=20)
 
     for i, course in enumerate(courses):
         ax = figure.add_subplot(n_rows, n_cols, i + 1)
@@ -37,23 +34,26 @@ def histogram(df, courses):
         ax.set_xlabel("Score")
         ax.set_ylabel("Students")
         for house in houses:
-            ax.hist(df[df["Hogwarts House"] == house][course],
-                    bins=10,
-                    alpha=0.5,
-                    label=house)
+            ax.hist(
+                df[df["Hogwarts House"] == house][course],
+                bins=10,
+                alpha=0.5,
+                label=house,
+            )
 
-    plt.legend(houses, loc='upper center', bbox_to_anchor=(1.5, 0.8))
+    plt.legend(houses, loc="upper center", bbox_to_anchor=(1.5, 0.8))
     plt.subplots_adjust(wspace=0.5, hspace=0.5)
     plt.show()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file",
-                        help="Path to the csv file",
-                        default=default_file_path)
-    parser.add_argument("-c", "--courses",
-                        help="List of courses to display separated by \',\'")
+    parser.add_argument(
+        "-f", "--file", help="Path to the csv file", default=default_file_path
+    )
+    parser.add_argument(
+        "-c", "--courses", help="List of courses to display separated by ','"
+    )
     args = parser.parse_args()
 
     try:
