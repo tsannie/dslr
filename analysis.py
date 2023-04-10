@@ -2,6 +2,7 @@ import argparse
 import pandas as pd
 from sklearn.metrics import accuracy_score
 
+
 def compare_predictions(predictions, truth):
     accuracy = accuracy_score(truth, predictions)
     print(f"Accuracy: {accuracy}")
@@ -15,8 +16,7 @@ def compare_predictions(predictions, truth):
     print(f"Incorrect: {incorrect}")
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "predictions",

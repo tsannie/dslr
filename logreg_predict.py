@@ -5,6 +5,7 @@ from utils import index_not_float, standardize, impute, predict
 
 default_predictions_path = "./data/predictions.csv"
 
+
 def logreg_predict(dataframe, thetas):
     houses = thetas.index
 
@@ -16,6 +17,9 @@ def logreg_predict(dataframe, thetas):
 
     to_remove = index_not_float(df)
     features = df.drop(df.columns[to_remove], axis=1)
+    features = features.drop("Potions", axis=1)
+    features = features.drop("Arithmancy", axis=1)
+    features = features.drop("Care of Magical Creatures", axis=1)
     features = features.values
 
     features = impute(features)
@@ -29,7 +33,7 @@ def logreg_predict(dataframe, thetas):
         for house in houses:
             theta = thetas["Theta"][house]
             proba = predict(features[i], theta)
-            print("Probability for {}: {:.0f}%".format(house, proba*100))
+            print("Probability for {}: {:.0f}%".format(house, proba * 100))
             if proba > most_probable[0]:
                 most_probable = (proba, house)
 
@@ -46,17 +50,11 @@ def save_predictions(predictions, path):
         f.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("dataset", help="Dataset to predict", metavar="dataset_path")
     parser.add_argument(
-        "dataset",
-        help="Dataset to predict",
-        metavar="dataset_path"
-    )
-    parser.add_argument(
-        "thetas",
-        help="Thetas to use for prediction",
-        metavar="thetas_path"
+        "thetas", help="Thetas to use for prediction", metavar="thetas_path"
     )
     args = parser.parse_args()
 

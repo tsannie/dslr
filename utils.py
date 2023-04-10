@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def is_float_column(df, feature):
     if isinstance(df[feature][0], float) and not np.isnan(df[feature][0]):
         return True
@@ -32,8 +33,21 @@ def impute(X):
     return X
 
 
+def impute_by_target(X, y):
+    """Replace missing values with the mean of the column"""
+
+    houses = set(y)
+    for house in houses:
+        house_indexes = np.where(y == house)
+        house_features = X[house_indexes]
+        mean = np.nanmean(house_features, axis=0)
+        missing = np.isnan(house_features)
+        house_features[missing] = np.take(mean, np.where(missing)[1])
+        X[house_indexes] = house_features
+    return X
+
+
 def predict(X, theta):
     """Return the prediction of X using a logistic regression"""
 
     return 1 / (1 + np.exp(-np.dot(X, theta)))
-
