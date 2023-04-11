@@ -6,6 +6,24 @@ from utils import index_not_float, standardize, impute, predict
 default_predictions_path = "./data/predictions.csv"
 
 
+def display(most_probable, all_probabilities, idx):
+    print("\033[34m{:3} \033[0m|".format(idx), end="")
+    for proba in all_probabilities:
+        if proba[0] == most_probable[0]:
+            if proba[0] == "Gryffindor":
+                print("\033[31m", end="")
+            elif proba[0] == "Slytherin":
+                print("\033[32m", end="")
+            elif proba[0] == "Ravenclaw":
+                print("\033[36m", end="")
+            elif proba[0] == "Hufflepuff":
+                print("\033[33m", end="")
+            print(" {:3.0f}% \033[0m|".format(proba[1] * 100), end="")
+        else:
+            print(" {:3.0f}% |".format(proba[1] * 100), end="")
+    print()
+
+
 def logreg_predict(dataframe, thetas, show_predictions=False):
     houses = thetas.index
 
@@ -41,13 +59,7 @@ def logreg_predict(dataframe, thetas, show_predictions=False):
         predictions.append((i, most_probable[0]))
 
         if show_predictions:
-            print("\033[33m{:3} \033[0m|".format(i), end="")
-            for proba in all_probabilities:
-                if proba[0] == most_probable[0]:
-                    print("\033[34m {:3.0f}% \033[0m|".format(proba[1] * 100), end="")
-                else:
-                    print(" {:3.0f}% |".format(proba[1] * 100), end="")
-            print()
+            display(most_probable, all_probabilities, i)
 
     return predictions
 
