@@ -4,7 +4,7 @@ import argparse
 from utils import index_not_float
 import seaborn as sns
 
-default_file_path = "./data/dataset_train.csv"
+default_file_path = "../data/dataset_train.csv"
 
 
 def pair_plot(df):
@@ -48,13 +48,11 @@ def pair_plot(df):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-f", "--file", help="Path to the csv file", default=default_file_path
-    )
+    parser.add_argument("csv_file", help="Path to the csv file")
     args = parser.parse_args()
 
     try:
-        df = pd.read_csv(args.file, index_col=0)
+        df = pd.read_csv(args.csv_file, index_col=0)
 
         pair_plot(df)
     except FileNotFoundError:

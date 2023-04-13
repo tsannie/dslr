@@ -4,7 +4,7 @@ import math
 import argparse
 from utils import index_not_float, is_float_column
 
-default_file_path = "./data/dataset_train.csv"
+default_file_path = "../data/dataset_train.csv"
 
 
 def histogram(df, courses):
@@ -48,16 +48,14 @@ def histogram(df, courses):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-f", "--file", help="Path to the csv file", default=default_file_path
-    )
+    parser.add_argument("csv_file", help="Path to the csv file")
     parser.add_argument(
         "-c", "--courses", help="List of courses to display separated by ','"
     )
     args = parser.parse_args()
 
     try:
-        df = pd.read_csv(args.file, index_col="Index")
+        df = pd.read_csv(args.csv_file, index_col=0)
 
         histogram(df, args.courses)
     except FileNotFoundError:

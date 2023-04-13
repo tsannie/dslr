@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import argparse
 from logistic_regression import LogisticRegression
-from utils import index_not_float, standardize, impute_by_target
+from data_visualization.utils import index_not_float, standardize, impute_by_target
 from sklearn.metrics import accuracy_score
 import os
 

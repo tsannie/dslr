@@ -1,7 +1,7 @@
 import argparse
 import pandas as pd
 import numpy as np
-from utils import index_not_float, standardize, impute, predict
+from data_visualization.utils import index_not_float, standardize, impute, predict
 
 default_predictions_path = "./data/predictions.csv"
 

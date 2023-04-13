@@ -120,7 +120,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        df = pd.read_csv(args.file, index_col="Index")
+        df = pd.read_csv(args.csv_file, index_col=0)
 
         print(ft_describe(df))
     except FileNotFoundError:

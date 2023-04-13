@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import argparse
 from utils import is_float_column, index_not_float
 
-default_file_path = "./data/dataset_train.csv"
+default_file_path = "../data/dataset_train.csv"
 
 
 def scatter(df, c1, c2):
@@ -58,9 +58,7 @@ def scatter(df, c1, c2):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-f", "--file", help="Path to the csv file", default=default_file_path
-    )
+    parser.add_argument("csv_file", help="Path to the csv file")
     parser.add_argument("-c1", "--course1", help="First course to compare")
     parser.add_argument("-c2", "--course2", help="Second course to compare")
 
@@ -70,7 +68,7 @@ if __name__ == "__main__":
         exit("You must provide two courses to compare")
 
     try:
-        df = pd.read_csv(args.file, index_col="Index")
+        df = pd.read_csv(args.csv_file, index_col=0)
 
         scatter(df, args.course1, args.course2)
     except FileNotFoundError:
