@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
+from data_analysis.utils import colorize_house, colorize_plot
 
 
 class LogisticRegression:
-    def __init__(self, learning_rate=0.01, batch_size=10, epochs=30):
+    def __init__(self, house_name, learning_rate=0.01, batch_size=10, epochs=5):
         self.learning_rate = learning_rate
         self.batch_size = batch_size
         self.epochs = epochs
@@ -13,6 +14,7 @@ class LogisticRegression:
         self.b = None
         self.history_accuracy = []
         self.history_loss = []
+        self.house_name = house_name
 
     def grandient_descent(self, X, y):
         m = X.shape[0]
@@ -29,10 +31,21 @@ class LogisticRegression:
         self.b = np.random.randn(1).reshape(-1, 1)
 
         for i in range(self.epochs):
-            print("\nEpoch {}/{}".format(i + 1, self.epochs))
-            for idx in tqdm(range(0, n_samples, self.batch_size)):
-                X_batch = X[idx : idx + self.batch_size]
-                y_batch = y[idx : idx + self.batch_size]
+            for e in tqdm(
+                range(0, n_samples, self.batch_size),
+                leave=False,
+                desc="{} epoch {:0{}}/{:0{}}, loss {:.4f}, accuracy {:.4f}".format(
+                    colorize_house(self.house_name),
+                    i + 1,
+                    len(str(self.epochs)),
+                    self.epochs,
+                    len(str(self.epochs)),
+                    self.history_loss[-1] if self.history_loss else 0,
+                    self.history_accuracy[-1] if self.history_accuracy else 0,
+                ),
+            ):
+                X_batch = X[e : e + self.batch_size]
+                y_batch = y[e : e + self.batch_size]
 
                 dw, db = self.grandient_descent(X_batch, y_batch)
 
@@ -41,27 +54,8 @@ class LogisticRegression:
 
                 y_predicted = self.sigmoid(np.dot(X, self.w) + self.b)
                 y_predicted_class = [1 if i > 0.5 else 0 for i in y_predicted]
-                accuracy = accuracy_score(y, y_predicted_class)
-                loss = self.log_loss(y, y_predicted)
-                self.history_accuracy.append(accuracy)
-                self.history_loss.append(loss)
-            print("Loss: {:.4f}, Accuracy: {:.4f}".format(loss, accuracy))
-
-        """
-
-        plt.plot(self.history_accuracy)
-        plt.title("Accuracy")
-
-        plt.figure()
-        plt.plot(self.history_loss)
-        plt.title("Loss")
-
-        plt.show() """
-
-        y_predicted = self.sigmoid(np.dot(X, self.w) + self.b)
-        y_predicted_class = [1 if i > 0.5 else 0 for i in y_predicted]
-        print("Loss: ", self.log_loss(y, y_predicted))
-        print("Accuracy: ", accuracy_score(y, y_predicted_class))
+                self.history_accuracy.append(accuracy_score(y, y_predicted_class))
+                self.history_loss.append(self.log_loss(y, y_predicted))
 
     def sigmoid(self, x):
         return 1.0 / (1.0 + np.exp(-x))
@@ -84,3 +78,19 @@ class LogisticRegression:
             f.write(house + ",")
             np.savetxt(f, self.w.T, delimiter=" ")
             f.close()
+
+    def stats(self):
+        _, ax = plt.subplots(1, 2, figsize=(15, 5))
+        ax[0].plot(self.history_loss)
+        ax[0].set_title("Loss")
+        ax[1].plot(self.history_accuracy)
+        ax[1].set_title("Accuracy")
+
+        plt.suptitle(
+            "House {}".format(self.house_name),
+            fontsize=20,
+            fontweight="bold",
+            color=colorize_plot(self.house_name),
+        )
+        plt.tight_layout()
+        plt.show()

@@ -1,6 +1,28 @@
 import numpy as np
 
 
+def colorize_house(house):
+    if house == "Gryffindor":
+        return "\033[31m" + house + "\033[0m"
+    elif house == "Slytherin":
+        return "\033[32m" + house + " \033[0m"
+    elif house == "Ravenclaw":
+        return "\033[36m" + house + " \033[0m"
+    elif house == "Hufflepuff":
+        return "\033[33m" + house + "\033[0m"
+
+
+def colorize_plot(house):
+    if house == "Gryffindor":
+        return "red"
+    elif house == "Slytherin":
+        return "green"
+    elif house == "Ravenclaw":
+        return "blue"
+    elif house == "Hufflepuff":
+        return "orange"
+
+
 def is_float_column(df, feature):
     if isinstance(df[feature][0], float) and not np.isnan(df[feature][0]):
         return True

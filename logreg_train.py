@@ -2,13 +2,23 @@ import numpy as np
 import pandas as pd
 import argparse
 from logistic_regression import LogisticRegression
-from data_visualization.utils import index_not_float, standardize, impute_by_target
+from data_analysis.utils import index_not_float, standardize, impute_by_target
 from sklearn.metrics import accuracy_score
-import os
+import threading
 
 default_file_path = "./data/dataset_train.csv"
 default_test_path = "./data/dataset_test.csv"
 default_weights_path = "./data/thetas.csv"
+
+
+def train_house(house, features, target, models):
+    target_house = np.where(target == house, 1, 0)
+
+    lr = LogisticRegression(house)
+    lr.fit(features, target_house)
+    lr.save(default_weights_path, house)
+
+    models.append(lr)
 
 
 def logreg(dataframe):
@@ -32,18 +42,19 @@ def logreg(dataframe):
         f.close()
 
     print("Starting training...")
+
+    models = []
+    threads = []
     for house in houses:
-        print("_" * 30)
-        print("Training for {}: ".format(house))
+        t = threading.Thread(target=train_house, args=(house, features, target, models))
+        threads.append(t)
+        t.start()
 
-        target_house = np.where(target == house, 1, 0)
+    for t in threads:
+        t.join()
 
-        lr = LogisticRegression()
-        lr.fit(features, target_house)
-        lr.save(default_weights_path, house)
-        print()
-
-    # test_logreg(lr)
+    for model in models:
+        model.stats()
 
 
 if __name__ == "__main__":
