@@ -4,7 +4,7 @@
 
 ## 📝 Description
 
-dslr (data science logistic regression) is a project that aims to predict the house of Hogwarts a student will be in based on student's results in different courses. The goal is to use logistic regression to predict the house of a student based on the results of the student in different courses.
+dslr (*data science logistic regression*) is a project that aims to predict the house of Hogwarts a student will be in based on student's results in different courses. The goal is to use [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) to predict the house of a student based on the results of the student in different courses.
 
 ## 📦 Installation
 
@@ -86,6 +86,22 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
+
+## 🏋️ logreg_train.py
+
+This script trains the [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) model. It saves the model in a pickle file.
+For the training, I used the gradient descent algorithm.
+
+
+
+For my cost function ([loss function](https://en.wikipedia.org/wiki/Loss_function)) I used the following formula:
+
+$ J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} y^{(i)} \log(h_\theta(x^{(i)})) + (1 - y^{(i)}) \log(1 - h_\theta(x^{(i)})) $
+
+
+
+
+
 
 
 
