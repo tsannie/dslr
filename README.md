@@ -11,8 +11,8 @@ dslr (_data science logistic regression_) is a project that aims to predict the 
   - [histogram.py](#2---histogrampy)
   - [scatter_plot.py](#3---scatter_plotpy)
   - [pair_plot.py](#4---pair_plotpy)
-- [logreg_train.py](#-logreg_trainpy)
-- [logreg_predict.py](#-logreg_predictpy)
+- [logreg_train.py](#logreg_trainpy)
+- [logreg_predict.py](#logreg_predictpy)
 
 ## 📦 Installation
 
@@ -95,7 +95,7 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-## 🏋️ logreg_train.py
+## logreg_train.py
 
 This script trains the [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) model for each house. It saves the model in a csv file.
 For the training, I used the gradient descent algorithm.
@@ -129,7 +129,7 @@ The option `-g` displays the graphs of the training. It shows the `loss` and the
 Example for Gryffindor:
 ![image](https://i.imgur.com/ZJE6nWY.png)
 
-## 🤯 logreg_predict.py
+## logreg_predict.py
 
 This script predict for each student in the csv file, the house he will be in based on the results of the student in different courses.
 The most probable house is written in the `predictions.csv` file.
