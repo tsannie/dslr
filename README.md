@@ -4,7 +4,7 @@
 
 ## 📝 Description
 
-dslr (*data science logistic regression*) is a project that aims to predict the house of Hogwarts a student will be in based on student's results in different courses. The goal is to use [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) to predict the house of a student based on the results of the student in different courses.
+dslr (_data science logistic regression_) is a project that aims to predict the house of Hogwarts a student will be in based on student's results in different courses. The goal is to use [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) to predict the house of a student based on the results of the student in different courses.
 
 ## 📦 Installation
 
@@ -89,19 +89,27 @@ optional arguments:
 
 ## 🏋️ logreg_train.py
 
-This script trains the [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) model. It saves the model in a pickle file.
+This script trains the [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) model for each house. It saves the model in a csv file.
 For the training, I used the gradient descent algorithm.
+The training is threaded to be faster.
 
+```bash
+usage: logreg_train.py [-h] [-w weights_path] [-g] [-b batch_size]
+                       [-l learning_rate] [-e epochs]
+                       csv_file_path
 
+positional arguments:
+  csv_file_path         CSV file to train on
 
-For my cost function ([loss function](https://en.wikipedia.org/wiki/Loss_function)) I used the following formula:
-
-$ J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} y^{(i)} \log(h_\theta(x^{(i)})) + (1 - y^{(i)}) \log(1 - h_\theta(x^{(i)})) $
-
-
-
-
-
-
-
-
+optional arguments:
+  -h, --help            show this help message and exit
+  -w weights_path, --weights weights_path
+                        Path to save weights (default: ./data/thetas.csv)
+  -g, --graph           Show graphs of training
+  -b batch_size, --batch batch_size
+                        Batch size (default: 10)
+  -l learning_rate, --learning learning_rate
+                        Learning rate (default: 0.01)
+  -e epochs, --epochs epochs
+                        Number of epochs (default: 12)
+```
