@@ -11,8 +11,8 @@ dslr (_data science logistic regression_) is a project that aims to predict the 
   - [histogram.py](#2---histogrampy)
   - [scatter_plot.py](#3---scatter_plotpy)
   - [pair_plot.py](#4---pair_plotpy)
-- [logreg_train.py](#🏋️-logreg_trainpy)
-- [logreg_predict.py](#🤯-logreg_predictpy)
+- [logreg_train.py](#-logreg_trainpy)
+- [logreg_predict.py](#-logreg_predictpy)
 
 ## 📦 Installation
 
