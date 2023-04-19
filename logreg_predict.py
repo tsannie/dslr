@@ -85,6 +85,12 @@ if __name__ == "__main__":
         default=False,
         action="store_true",
     )
+    parser.add_argument(
+        "-p",
+        help="Predictions file path (default: {})".format(default_predictions_path),
+        default=default_predictions_path,
+        metavar="predictions_path",
+    )
 
     args = parser.parse_args()
 
