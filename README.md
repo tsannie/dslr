@@ -6,15 +6,6 @@
 
 dslr (_data science logistic regression_) is a project that aims to predict the house of Hogwarts a student will be in based on student's results in different courses. The goal is to use [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) to predict the house of a student based on the results of the student in different courses.
 
-## 📦 Installation
-
-```bash
-git clone https://github.com/tsannie/dslr && cd dslr
-pip install -r requirements.txt
-```
-
-## Summary
-
 - [Data analysis](#-data-analysis)
   - [describe.py](#1---describepy)
   - [histogram.py](#2---histogrampy)
@@ -22,6 +13,13 @@ pip install -r requirements.txt
   - [pair_plot.py](#4---pair_plotpy)
 - [logreg_train.py](#🏋️-logreg_trainpy)
 - [logreg_predict.py](#🤯-logreg_predictpy)
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/tsannie/dslr && cd dslr
+pip install -r requirements.txt
+```
 
 ## 🧐 Data analysis
 
