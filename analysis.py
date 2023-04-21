@@ -7,11 +7,9 @@ def compare_predictions(predictions, truth):
     accuracy = accuracy_score(truth, predictions)
     print(f"Accuracy: {accuracy}")
 
-    # number of correct predictions
     correct = (predictions == truth).sum()
     print(f"Correct: {correct}")
 
-    # number of incorrect predictions
     incorrect = (predictions != truth).sum()
     print(f"Incorrect: {incorrect}")
 

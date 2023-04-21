@@ -39,7 +39,7 @@ def logreg(dataframe, show_graphs=False, batch_size=16, learning_rate=0.01, epoc
         f.write("Hogwarts House,Theta\n")
         f.close()
 
-    print("Starting training...")
+    print("Start of training...")
 
     models = []
     threads = []
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-b",
         "--batch",
-        help="Batch size (default: 10)",
+        help="Batch size (default: 10) (0 for full batch)",
         default=10,
         type=int,
         metavar="batch_size",
@@ -107,6 +107,8 @@ if __name__ == "__main__":
 
     try:
         df = pd.read_csv(args.csv_file, index_col=0)
+        if args.batch == 0:
+            args.batch = df.shape[0]
 
         logreg(df, args.graph, args.batch, args.learning, args.epochs)
     except FileNotFoundError:
